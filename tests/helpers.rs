@@ -80,7 +80,7 @@ pub async fn setup_env() -> Result<TestEnv> {
 }
 
 async fn start_nats_server() -> Result<ContainerAsync<GenericImage>> {
-    GenericImage::new("nats", "2.10.18")
+    GenericImage::new("nats", "2.10.18-alpine")
         .with_exposed_port(DEFAULT_NATS_PORT.into())
         .with_wait_for(WaitFor::message_on_stderr("Server is ready"))
         .with_cmd(["-js"])

@@ -54,13 +54,18 @@ pub struct PutModelResponse {
     pub name: String,
 }
 
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub enum PutResultSuccess {
+    Created,
+    NewVersion(String),
+}
+
 /// Possible outcomes of a put request
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum PutResult {
+    Success(PutResultSuccess),
     Error,
-    Created,
-    NewVersion,
 }
 
 /// Summary of a given model returned when listing

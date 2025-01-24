@@ -151,7 +151,12 @@ async fn test_crud_operations() {
 
     println!("Response: {resp:?}");
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
 
     let raw = tokio::fs::read("./oam/simple1.yaml")
         .await
@@ -165,7 +170,12 @@ async fn test_crud_operations() {
         .await;
     // This manifest has no version, so it's assigned on as a ULID
     let example_version = resp.current_version.clone();
-    assert_put_response(resp, PutResult::Created, &example_version, 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        &example_version,
+        1,
+    );
 
     // Check that we can get back the manifest
     let resp: GetModelResponse = test_server
@@ -214,7 +224,12 @@ async fn test_crud_operations() {
             None,
         )
         .await;
-    assert_put_response(resp, PutResult::NewVersion, "v0.0.2", 2);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::NewVersion("v0.0.2".to_string())),
+        "v0.0.2",
+        2,
+    );
 
     manifest
         .metadata
@@ -227,7 +242,12 @@ async fn test_crud_operations() {
             None,
         )
         .await;
-    assert_put_response(resp, PutResult::NewVersion, "v0.0.3", 3);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::NewVersion("v0.0.3".to_string())),
+        "v0.0.3",
+        3,
+    );
 
     // Make sure we still only have 2 manifests
     let ListModelsResponse { models: resp, .. } = test_server
@@ -391,7 +411,12 @@ async fn test_bad_requests() {
         .get_response("default.model.put", raw, None)
         .await;
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
 
     // https://imgflip.com/memegenerator/195657242/Do-it-again
     let raw = tokio::fs::read("./oam/sqldbpostgres.yaml")
@@ -489,7 +514,12 @@ async fn test_delete_noop() {
         .get_response("default.model.put", raw, None)
         .await;
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
 
     let resp: DeleteModelResponse = test_server
         .get_response(
@@ -528,7 +558,12 @@ async fn test_invalid_topics() {
         .get_response("default.model.put", raw, None)
         .await;
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
 
     // Too short
     let resp: HashMap<String, String> = test_server
@@ -610,7 +645,12 @@ async fn test_manifest_parsing() {
     // This manifest has no version, so it's assigned on as a ULID
     let version = resp.current_version.clone();
 
-    assert_put_response(resp, PutResult::Created, &version, 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        &version,
+        1,
+    );
 
     // Test yaml manifest with hint
     let raw = tokio::fs::read("./oam/sqldbpostgres.yaml")
@@ -624,7 +664,12 @@ async fn test_manifest_parsing() {
         )
         .await;
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
 
     // Test json manifest with hint
     manifest
@@ -640,7 +685,12 @@ async fn test_manifest_parsing() {
         )
         .await;
 
-    assert_put_response(resp, PutResult::NewVersion, "v0.0.2", 2);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::NewVersion("v0.0.2".to_string())),
+        "v0.0.2",
+        2,
+    );
 
     // Smoke test to make sure the server can handle the various provider config options
     let raw = tokio::fs::read("./oam/config.yaml")
@@ -652,7 +702,12 @@ async fn test_manifest_parsing() {
     // This manifest has no version, so it's assigned on as a ULID
     let version = resp.current_version.clone();
 
-    assert_put_response(resp, PutResult::Created, &version, 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        &version,
+        1,
+    );
 }
 
 #[tokio::test]
@@ -675,7 +730,12 @@ async fn test_deploy() {
         .get_response("default.model.put", raw, None)
         .await;
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
     manifest
         .metadata
         .annotations
@@ -687,7 +747,12 @@ async fn test_deploy() {
             None,
         )
         .await;
-    assert_put_response(resp, PutResult::NewVersion, "v0.0.2", 2);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::NewVersion("v0.0.2".to_string())),
+        "v0.0.2",
+        2,
+    );
 
     // Try to deploy and undeploy something that doesn't exist
     let resp: DeployModelResponse = test_server
@@ -850,7 +915,12 @@ async fn test_delete_deploy() {
         .get_response("default.model.put", raw, None)
         .await;
 
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
     manifest
         .metadata
         .annotations
@@ -862,7 +932,12 @@ async fn test_delete_deploy() {
             None,
         )
         .await;
-    assert_put_response(resp, PutResult::NewVersion, "v0.0.2", 2);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::NewVersion("v0.0.2".to_string())),
+        "v0.0.2",
+        2,
+    );
 
     let resp: DeployModelResponse = test_server
         .get_response(
@@ -942,7 +1017,12 @@ async fn test_status() {
     let resp: PutModelResponse = test_server
         .get_response("default.model.put", raw, None)
         .await;
-    assert_put_response(resp, PutResult::Created, "v0.0.1", 1);
+    assert_put_response(
+        resp,
+        PutResult::Success(PutResultSuccess::Created),
+        "v0.0.1",
+        1,
+    );
 
     let resp: StatusResponse = test_server
         .get_response(

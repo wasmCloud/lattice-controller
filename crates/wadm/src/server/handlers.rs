@@ -10,8 +10,8 @@ use wadm_types::{
     api::{
         DeleteModelRequest, DeleteModelResponse, DeleteResult, DeployModelRequest,
         DeployModelResponse, DeployResult, GetModelRequest, GetModelResponse, GetResult,
-        ListModelsResponse, PutModelResponse, PutResult, Status, StatusResponse, StatusResult,
-        UndeployModelRequest, VersionInfo, VersionResponse,
+        ListModelsResponse, PutModelResponse, PutResult, PutResultSuccess, Status, StatusResponse,
+        StatusResult, UndeployModelRequest, VersionInfo, VersionResponse,
     },
     CapabilityProperties, Manifest, Properties,
 };
@@ -139,13 +139,15 @@ impl<P: Publisher> Handler<P> {
             return;
         }
 
-        let resp = PutModelResponse {
+        let resp: PutModelResponse = PutModelResponse {
             // If we successfully insert, the given manifest version will be the new current version
             current_version: current_manifests.current_version().to_string(),
             result: if current_manifests.count() == 1 {
-                PutResult::Created
+                PutResult::Success(PutResultSuccess::Created)
             } else {
-                PutResult::NewVersion
+                PutResult::Success(PutResultSuccess::NewVersion(
+                    current_manifests.current_version().to_string(),
+                ))
             },
             name: manifest_name.clone(),
             total_versions: current_manifests.count(),

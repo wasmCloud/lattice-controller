@@ -1,7 +1,7 @@
 services:
   # Set up a NATS core node and two leaf nodes which will connect with basic auth.
   nats-core:
-    image: nats:2.9.16-alpine
+    image: nats:2.10.18-alpine
     ports:
       - "127.0.0.1:5222:5222"
       - "127.0.0.1:7422:7422"
@@ -11,7 +11,7 @@ services:
   nats-leaf-wadm:
     depends_on:
       - nats-core
-    image: nats:2.9.16-alpine
+    image: nats:2.10.18-alpine
     ports:
       - "127.0.0.1:4222:4222"
     command: ["-js", "-a", "0.0.0.0", "-c", "/nats/config/nats-leaf-wadm.conf"]
@@ -20,7 +20,7 @@ services:
   nats-leaf-a:
     depends_on:
       - nats-core
-    image: nats:2.9.16-alpine
+    image: nats:2.10.18-alpine
     ports:
       - "127.0.0.1:4223:4222"
     command: ["-js", "-a", "0.0.0.0", "-c", "/nats/config/nats-leaf-a.conf"]
@@ -29,7 +29,7 @@ services:
   nats-leaf-b:
     depends_on:
       - nats-core
-    image: nats:2.9.16-alpine
+    image: nats:2.10.18-alpine
     ports:
       - "127.0.0.1:4224:4222"
     command: ["-js", "-a", "0.0.0.0", "-c", "/nats/config/nats-leaf-b.conf"]

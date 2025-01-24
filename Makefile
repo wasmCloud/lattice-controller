@@ -78,7 +78,7 @@ CARGO_TEST_TARGET ?=
 
 test:: ## Run tests
 ifeq ($(shell nc $(NC_FLAGS) -w1 127.0.0.1 4222 || echo fail),fail)
-	$(DOCKER) run --rm -d --name wadm-test -p 127.0.0.1:4222:4222 nats:2.10 -js
+	$(DOCKER) run --rm -d --name wadm-test -p 127.0.0.1:4222:4222 nats:2.10.18-alpine -js
 	$(CARGO) test $(CARGO_TEST_TARGET) -- --nocapture
 	$(DOCKER) stop wadm-test
 else
