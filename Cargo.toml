@@ -11,7 +11,7 @@ repository = "https://github.com/wasmcloud/wadm"
 default-run = "wadm"
 
 [workspace.package]
-version = "0.20.1"
+version = "0.20.2"
 
 [features]
 default = []
@@ -84,8 +84,8 @@ ulid = { version = "1", features = ["serde"] }
 utoipa = "5"
 uuid = "1"
 wadm = { version = "0.20.1", path = "./crates/wadm" }
-wadm-client = { version = "0.8.1", path = "./crates/wadm-client" }
-wadm-types = { version = "0.8.1", path = "./crates/wadm-types" }
+wadm-client = { version = "0.8", path = "./crates/wadm-client" }
+wadm-types = { version = "0.8", path = "./crates/wadm-types" }
 wasmcloud-control-interface = { version = "2.3.0" }
 wasmcloud-secrets-types = "0.5.0"
 wit-bindgen-wrpc = { version = "0.9", default-features = false }
